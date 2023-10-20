@@ -1,0 +1,18 @@
+### standart template
+# general
+*.pyc
+__pychache__/
+**/__pycache__/
+local_settings.py
+.coverage
+
+# IntelliJ project files
+.vscode
+.idea
+*.iml
+out
+gen
+
+# venv
+venv
+

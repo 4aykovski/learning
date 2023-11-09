@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -55,40 +57,133 @@ table {
 
 /* конец обнуления */
 
-header, footer {
-    text-align: center;
-    height: 205px;
-    background-color: aqua;
+.bold_ubuntu {
+    font-weight: 500;
 }
 
-.navbar {
-    text-align: left;
-    float: left;
-    position: absolute;
-    margin-top: 155px;
+.light_ubuntu {
+    font-weight: 300;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Ubuntu, sans-serif;
+    font-weight: 400;
+}
+
+.wrapper {
+    height: inherit;
+    width: 1280px;
+    margin: 0 auto;
+}
+
+header {
+    color: black;
+    background-color: #fff;
+    height: 205px;
+}
+
+#upper_header {
+    height: 155px;
+    width: 100%;
+    color: #000;
+}
+
+#upper_header_wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#upper_header_logo {
+    width: fit-content;
+    height: fit-content;
+    margin-right: 45px;
+}
+
+#upper_header_title {
+    flex-grow: 4;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+#upper_header_back_to_official_text {
+    flex-grow: 1;
+    text-align: right;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+#navbar {
     height: 50px;
     width: 100%;
-    background-color: orange;
-}
-
-#nav ul {
-    list-style: none;
-}
-
-#nav li:first-of-type {
-    margin-left: 320px;
-}
-
-
-#nav li {
     color: #fff;
-    margin: 5px;
+    background-color: #ff8c00;
+}
+
+#navbar_wrapper {
     line-height: 50px;
-    height: 50px;
-    display: inline;
+    font-size: 1.2em;
+    display: flex;
+}
+
+.navbar_content_item {
+    padding: 0 15px;
+}
+
+.navbar_content_item:hover, .navbar_content_item:active {
+    background-color: #af3806;
+}
+
+main {
+    color: black;
+    flex-grow: 1;
+    background-color: green;
+}
+
+#slider {
+    height: 200px;
+    background-color: grey;
+}
+
+#news_container {
+    background-color: red;
+    width: inherit;
+    height: 230px;
+    display: flex;
+
+}
+
+#news_container_title {
+    margin-top: 20px;
+    font-size: 32px;
+    margin-left: 15px;
+    font-weight: 500;
+}
+
+.news_block {
+    align-content: center;
+    height: 230px;
+    width: 320px;
+}
+
+.news_img_block {
+    width: inherit;
+    height: 180px;
+    background-color: chartreuse;
 }
 
 footer {
-    height: 100px;
+    height: 320px;
+    color: black;
+    flex-shrink: 0;
+    background-color: #808080;
 }
-

@@ -1,3 +1,3 @@
 'use strict';
-let sd = 2;
-alert(sd);
+let name = prompt('Input your name', 'name');
+alert(`Your name is ${name}!`);

@@ -53,22 +53,37 @@
 // alert(summaTwo);
 
 // task 4
-function multiplyNumeric(obj) {
-    for (let key in obj) {
-        if (typeof obj[key] === "number") {
-            obj[key] *= 2;
-        }
-    }
-}
-
-let menu = {
-    width: 200,
-    height: 200,
-    title: 'My menu',
+// function multiplyNumeric(obj) {
+//     for (let key in obj) {
+//         if (typeof obj[key] === "number") {
+//             obj[key]*= 2;
+//         }
+//     }
+// }
+//
+// let menu = {
+//     width: 200,
+//     height: 200,
+//     title: 'My menu',
+// };
+//
+// console.log(menu)
+//
+// multiplyNumeric(menu);
+//
+// console.log(menu)
+let user = {
+    name: 'Egor',
+    sizes: {
+        height: 180,
+        weight: 60,
+    },
 };
 
-console.log(menu)
+let egor = structuredClone(user);
 
-multiplyNumeric(menu);
+egor.name = 'NeEgor';
+egor.sizes.weight = 12;
 
-console.log(menu)
+console.log(user);
+console.log(egor);

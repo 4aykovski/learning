@@ -17,15 +17,15 @@
 // console.log(counter.up());
 // console.log(counter.count);
 
-// function sum(a) {
-//     function sum2(b) {
-//         return a+b;
-//     }
-//
-//     return sum2(2);
-// }
-//
-// console.log(sum(5));
+function sum(a) {
+    function sum2(b) {
+        return a + b;
+    }
+
+    return sum2;
+}
+
+console.log(sum(5)(2));
 
 // function inBetween(a, b) {
 //     return function (value) {

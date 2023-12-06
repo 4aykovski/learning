@@ -1,6 +1,6 @@
 'use strict'
 
-class Clock {
+class Clock{
     constructor({template}) {
         this.template = template;
     }
@@ -49,4 +49,13 @@ class ExtendedClock extends Clock {
 }
 
 let clock = new ExtendedClock({template: 'h:m:s', precision: 2000});
+console.log(clock);
 clock.start()
+
+// let obj = {
+//     name: '123'
+// }
+//
+// let obj2 = Object.create(obj);
+//
+// console.log(obj2.__proto__.__proto__)

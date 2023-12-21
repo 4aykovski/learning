@@ -1,6 +1,9 @@
 package main
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type employee struct {
 	id     int
@@ -13,6 +16,30 @@ type storage interface {
 	insert(e employee) error
 	get(id int) (employee, error)
 	delete(id int) error
+}
+
+type dumbStorage struct {
+}
+
+func newDumbStorage() *dumbStorage {
+	return &dumbStorage{}
+}
+
+func (d *dumbStorage) insert(e employee) error {
+	fmt.Println("Employee was inserted")
+	return nil
+}
+
+func (d *dumbStorage) get(id int) (employee, error) {
+	e := employee{
+		id: id,
+	}
+	return e, nil
+}
+
+func (d *dumbStorage) delete(id int) error {
+	fmt.Println("Employee was deleted")
+	return nil
 }
 
 type memoryStorage struct {
@@ -44,6 +71,17 @@ func (m *memoryStorage) delete(id int) error {
 	return nil
 }
 
-func main() {
+func spawnEmployees(s storage) {
+	for i := 0; i < 10; i++ {
+		s.insert(employee{id: i})
+	}
+}
 
+func main() {
+	var s1 storage
+	var s2 storage
+	s1 = newMemoryStorage()
+	s2 = newDumbStorage()
+	spawnEmployees(s1)
+	spawnEmployees(s2)
 }

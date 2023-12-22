@@ -73,7 +73,10 @@ func (m *memoryStorage) delete(id int) error {
 
 func spawnEmployees(s storage) {
 	for i := 0; i < 10; i++ {
-		s.insert(employee{id: i})
+		err := s.insert(employee{id: i})
+		if err != nil {
+			return
+		}
 	}
 }
 

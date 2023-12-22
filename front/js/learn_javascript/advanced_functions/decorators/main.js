@@ -22,23 +22,44 @@
 //
 // workers.func('phrase');
 
-function spy(func) {
-    return function (a, b) {
-        let calls = [];
-        func(a, b);
-        calls.push(a,b);
-    }
-}
+// function spy(func) {
+//     function wrapper(...args) {
+//         wrapper.calls.push(args);
+//         return func.apply(this, args);
+//     }
+//
+//     wrapper.calls = [];
+//     return wrapper;
+// }
+//
+// function work(a, b) {
+//     console.log(a + b);
+// }
+//
+// work = spy(work);
+//
+// work(1, 2);
+// work(3, 4);
+//
+// for (let args of work.calls) {
+//     console.log(`call ${args.join(', ')}`);
+// }
 
-function work(a, b) {
-    console.log(a + b);
-}
+// function delay(func, delay) {
+//     function wrapper(...args) {
+//         setTimeout(() => func.apply(this, args), delay);
+//     }
+//
+//     return wrapper;
+// }
+//
+// function f(x) {
+//     console.log(x);
+// }
+//
+// let f1000 = delay(f, 1000);
+// let f1500 = delay(f, 1500);
+//
+// f1000('text');
+// f1500('text');
 
-work = spy(work);
-
-work(1, 2);
-work(3, 4);
-
-for (let args of work.calls) {
-    console.log(`call ${args.join(', ')}`);
-}

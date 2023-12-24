@@ -17,4 +17,5 @@ func main() {
 	for _, area := range areas {
 		fmt.Printf("Area: %f64\n", area)
 	}
+
 }

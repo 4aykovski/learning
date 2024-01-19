@@ -5,8 +5,8 @@ import (
 	tgClient "github.com/4aykovski/learning/tree/main/golang/telegram-bot/clients/telegram"
 	event_consumer "github.com/4aykovski/learning/tree/main/golang/telegram-bot/consumer/event-consumer"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/events/telegram"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/logger"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/storage/files"
-	"log"
 )
 
 const (
@@ -22,12 +22,12 @@ func main() {
 		files.New(storagePath),
 	)
 
-	log.Print("service started")
+	logger.Info.Print("service started")
 
 	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
 
 	if err := consumer.Start(); err != nil {
-		log.Fatal("service is stopped", err)
+		logger.Err.Fatal("service is stopped", err)
 	}
 }
 
@@ -36,7 +36,7 @@ func mustToken() string {
 	flag.Parse()
 
 	if *token == "" {
-		log.Fatal("token is not specified")
+		logger.Err.Fatal("token is not specified")
 	}
 
 	return *token

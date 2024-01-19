@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/clients/telegram"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/e"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/logger"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/storage"
-	"log"
 	"net/url"
 	"os"
 	"strings"
@@ -20,7 +20,7 @@ const (
 func (p *Processor) doCmd(text string, chatID int, username string) error {
 	text = strings.TrimSpace(text)
 
-	log.Printf("got new command '%s' from '%s'", text, username)
+	logger.Info.Printf("got new command '%s' from '%s'", text, username)
 
 	if isAddCmd(text) {
 		return p.savePage(chatID, text, username)

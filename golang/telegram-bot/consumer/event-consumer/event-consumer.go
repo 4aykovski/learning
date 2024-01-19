@@ -2,7 +2,7 @@ package event_consumer
 
 import (
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/events"
-	"log"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/logger"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func (c *Consumer) Start() error {
 	for {
 		gotEvents, err := c.fetcher.Fetch(c.batchSize)
 		if err != nil {
-			log.Printf("[ERR] consumer: %s", err.Error())
+			logger.Err.Printf("[ERR] consumer: %s", err.Error())
 			continue
 		}
 
@@ -34,7 +34,7 @@ func (c *Consumer) Start() error {
 		}
 
 		if err := c.handleEvents(gotEvents); err != nil {
-			log.Print(err)
+			logger.Err.Print(err)
 			continue
 		}
 	}
@@ -45,10 +45,10 @@ func (c *Consumer) Start() error {
 // параллельная обработка :
 func (c *Consumer) handleEvents(events []events.Event) error {
 	for _, event := range events {
-		log.Printf("got new event: %s", event.Text)
+		logger.Info.Printf("got new event: %s", event.Text)
 
 		if err := c.processor.Process(event); err != nil {
-			log.Printf("can't handle event: %s", err.Error())
+			logger.Err.Printf("can't handle event: %s", err.Error())
 			continue
 		}
 	}

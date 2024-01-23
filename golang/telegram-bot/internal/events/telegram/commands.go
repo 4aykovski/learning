@@ -2,13 +2,13 @@ package telegram
 
 import (
 	"errors"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/clients/telegram"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/e"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/logger"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/storage"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/clients/telegram"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/pkg/logger"
 )
 
 const (
@@ -39,7 +39,7 @@ func (p *Processor) doCmd(text string, chatID int, username string) error {
 }
 
 func (p *Processor) savePage(chatID int, pageURL string, username string) (err error) {
-	defer func() { err = e.WrapIfErr("can't do command: save page", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't do command: save page", err) }()
 
 	sendMsg := NewMessageSender(chatID, p.tg)
 
@@ -68,7 +68,7 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 }
 
 func (p *Processor) sendRandom(chatID int, username string) (err error) {
-	defer func() { err = e.WrapIfErr("can't do command: can't send random", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't do command: can't send random", err) }()
 
 	sendMsg := NewMessageSender(chatID, p.tg)
 

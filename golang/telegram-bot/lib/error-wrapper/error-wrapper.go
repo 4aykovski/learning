@@ -1,4 +1,4 @@
-package e
+package error_wrapper
 
 import "fmt"
 

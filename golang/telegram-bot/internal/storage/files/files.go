@@ -4,12 +4,13 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/e"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/storage"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage"
+	error_wrapper "github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/error-wrapper"
 )
 
 type Storage struct {
@@ -23,7 +24,7 @@ func New(basePath string) Storage {
 }
 
 func (s Storage) Save(page *storage.Page) (err error) {
-	defer func() { err = e.WrapIfErr("can't save page", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't save page", err) }()
 
 	fPath := filepath.Join(s.basePath, page.UserName)
 
@@ -53,7 +54,7 @@ func (s Storage) Save(page *storage.Page) (err error) {
 }
 
 func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
-	defer func() { err = e.WrapIfErr("can't pick random page", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't pick random page", err) }()
 
 	path := filepath.Join(s.basePath, userName)
 
@@ -82,14 +83,14 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
 func (s Storage) Remove(p *storage.Page) error {
 	fName, err := fileName(p)
 	if err != nil {
-		return e.Wrap("can't remove a file", err)
+		return error_wrapper.Wrap("can't remove a file", err)
 	}
 
 	path := filepath.Join(s.basePath, p.UserName, fName)
 
 	if err := os.Remove(path); err != nil {
 		msg := fmt.Sprintf("can't remove a file %s", path)
-		return e.Wrap(msg, err)
+		return error_wrapper.Wrap(msg, err)
 	}
 
 	return nil
@@ -98,7 +99,7 @@ func (s Storage) Remove(p *storage.Page) error {
 func (s Storage) IsExists(p *storage.Page) (bool, error) {
 	fName, err := fileName(p)
 	if err != nil {
-		return false, e.Wrap("can't check if file %s exists", err)
+		return false, error_wrapper.Wrap("can't check if file %s exists", err)
 	}
 
 	path := filepath.Join(s.basePath, p.UserName, fName)
@@ -108,7 +109,7 @@ func (s Storage) IsExists(p *storage.Page) (bool, error) {
 		return false, nil
 	case err != nil:
 		msg := fmt.Sprintf("can't check if file %s exists", path)
-		return false, e.Wrap(msg, err)
+		return false, error_wrapper.Wrap(msg, err)
 	}
 
 	return true, nil
@@ -117,7 +118,7 @@ func (s Storage) IsExists(p *storage.Page) (bool, error) {
 func (s Storage) decodePage(fPath string) (*storage.Page, error) {
 	f, err := os.Open(fPath)
 	if err != nil {
-		return nil, e.Wrap("can't decode a page", err)
+		return nil, error_wrapper.Wrap("can't decode a page", err)
 	}
 
 	defer func() { _ = f.Close() }()
@@ -125,7 +126,7 @@ func (s Storage) decodePage(fPath string) (*storage.Page, error) {
 	var p storage.Page
 
 	if err := gob.NewDecoder(f).Decode(&p); err != nil {
-		return nil, e.Wrap("can't decode a page", err)
+		return nil, error_wrapper.Wrap("can't decode a page", err)
 	}
 
 	return &p, nil

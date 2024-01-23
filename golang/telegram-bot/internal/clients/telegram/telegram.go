@@ -2,12 +2,13 @@ package telegram
 
 import (
 	"encoding/json"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/e"
 	"io"
 	"net/http"
 	"net/url"
 	"path"
 	"strconv"
+
+	error_wrapper "github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/error-wrapper"
 )
 
 type Client struct {
@@ -34,7 +35,7 @@ func newBasePath(token string) string {
 }
 
 func (c *Client) Updates(offset int, limit int) (updates []Update, err error) {
-	defer func() { err = e.WrapIfErr("can't get updates", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't get updates", err) }()
 
 	q := url.Values{}
 	q.Add("offset", strconv.Itoa(offset))
@@ -62,13 +63,13 @@ func (c *Client) SendMessage(chatID int, text string) error {
 
 	_, err := c.doRequest(sendMessageMethod, q)
 	if err != nil {
-		return e.Wrap("can't send a message", err)
+		return error_wrapper.Wrap("can't send a message", err)
 	}
 	return nil
 }
 
 func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
-	defer func() { err = e.WrapIfErr("can't do request", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't do request", err) }()
 
 	u := url.URL{
 		Scheme: "https",

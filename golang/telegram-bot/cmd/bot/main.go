@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	tgClient "github.com/4aykovski/learning/tree/main/golang/telegram-bot/clients/telegram"
-	event_consumer "github.com/4aykovski/learning/tree/main/golang/telegram-bot/consumer/event-consumer"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/events/telegram"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/logger"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/storage/files"
+
+	tgClient "github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/clients/telegram"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/consumer/event-consumer"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/events/telegram"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage/files"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/pkg/logger"
 )
 
 const (
@@ -22,9 +23,9 @@ func main() {
 		files.New(storagePath),
 	)
 
-	logger.Info.Print("service started")
-
 	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
+
+	logger.Info.Print("service started")
 
 	if err := consumer.Start(); err != nil {
 		logger.Err.Fatal("service is stopped", err)

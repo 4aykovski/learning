@@ -1,9 +1,10 @@
 package event_consumer
 
 import (
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/events"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/logger"
 	"time"
+
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/events"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/pkg/logger"
 )
 
 type Consumer struct {

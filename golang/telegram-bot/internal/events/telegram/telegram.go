@@ -2,14 +2,15 @@ package telegram
 
 import (
 	"errors"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/clients/telegram"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/events"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/e"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/storage"
+
+	telegram2 "github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/clients/telegram"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/events"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage"
+	error_wrapper "github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/error-wrapper"
 )
 
 type Processor struct {
-	tg      *telegram.Client
+	tg      *telegram2.Client
 	offset  int
 	storage storage.Storage
 }
@@ -24,7 +25,7 @@ var (
 	ErrUnknownMetaType  = errors.New("unknown meta type")
 )
 
-func New(client *telegram.Client, storage storage.Storage) *Processor {
+func New(client *telegram2.Client, storage storage.Storage) *Processor {
 	return &Processor{
 		tg:      client,
 		storage: storage,
@@ -34,7 +35,7 @@ func New(client *telegram.Client, storage storage.Storage) *Processor {
 func (p *Processor) Fetch(limit int) ([]events.Event, error) {
 	updates, err := p.tg.Updates(p.offset, limit)
 	if err != nil {
-		return nil, e.Wrap("can't get events", err)
+		return nil, error_wrapper.Wrap("can't get events", err)
 	}
 
 	if len(updates) == 0 {
@@ -57,12 +58,12 @@ func (p *Processor) Process(event events.Event) error {
 	case events.Message:
 		return p.processMessage(event)
 	default:
-		return e.Wrap("can't process message", ErrUnknownEventType)
+		return error_wrapper.Wrap("can't process message", ErrUnknownEventType)
 	}
 }
 
 func (p *Processor) processMessage(event events.Event) (err error) {
-	defer func() { err = e.WrapIfErr("can't process message", err) }()
+	defer func() { err = error_wrapper.WrapIfErr("can't process message", err) }()
 
 	meta, err := meta(event)
 	if err != nil {
@@ -79,13 +80,13 @@ func (p *Processor) processMessage(event events.Event) (err error) {
 func meta(event events.Event) (Meta, error) {
 	res, ok := event.Meta.(Meta)
 	if !ok {
-		return Meta{}, e.Wrap("can't get meta", ErrUnknownMetaType)
+		return Meta{}, error_wrapper.Wrap("can't get meta", ErrUnknownMetaType)
 	}
 
 	return res, nil
 }
 
-func event(upd telegram.Update) events.Event {
+func event(upd telegram2.Update) events.Event {
 	updType := fetchType(upd)
 	res := events.Event{
 		Type: updType,
@@ -102,7 +103,7 @@ func event(upd telegram.Update) events.Event {
 	return res
 }
 
-func fetchText(upd telegram.Update) string {
+func fetchText(upd telegram2.Update) string {
 	if upd.Message == nil {
 		return ""
 	}
@@ -110,7 +111,7 @@ func fetchText(upd telegram.Update) string {
 	return upd.Message.Text
 }
 
-func fetchType(upd telegram.Update) events.Type {
+func fetchType(upd telegram2.Update) events.Type {
 	if upd.Message == nil {
 		return events.Unknown
 	}

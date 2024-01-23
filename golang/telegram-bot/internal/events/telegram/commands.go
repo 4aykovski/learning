@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"context"
 	"errors"
 	"net/url"
 	"os"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/clients/telegram"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage"
+	errorWrapper "github.com/4aykovski/learning/tree/main/golang/telegram-bot/lib/error-wrapper"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/pkg/logger"
 )
 
@@ -39,7 +41,7 @@ func (p *Processor) doCmd(text string, chatID int, username string) error {
 }
 
 func (p *Processor) savePage(chatID int, pageURL string, username string) (err error) {
-	defer func() { err = error_wrapper.WrapIfErr("can't do command: save page", err) }()
+	defer func() { err = errorWrapper.WrapIfErr("can't do command: save page", err) }()
 
 	sendMsg := NewMessageSender(chatID, p.tg)
 
@@ -48,7 +50,7 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 		UserName: username,
 	}
 
-	isExists, err := p.storage.IsExists(page)
+	isExists, err := p.storage.IsExists(context.Background(), page)
 	if err != nil {
 		return err
 	}
@@ -56,7 +58,7 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 		return sendMsg(msgAlreadyExists)
 	}
 
-	if err := p.storage.Save(page); err != nil {
+	if err := p.storage.Save(context.Background(), page); err != nil {
 		return err
 	}
 
@@ -68,11 +70,11 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 }
 
 func (p *Processor) sendRandom(chatID int, username string) (err error) {
-	defer func() { err = error_wrapper.WrapIfErr("can't do command: can't send random", err) }()
+	defer func() { err = errorWrapper.WrapIfErr("can't do command: can't send random", err) }()
 
 	sendMsg := NewMessageSender(chatID, p.tg)
 
-	page, err := p.storage.PickRandom(username)
+	page, err := p.storage.PickRandom(context.Background(), username)
 	if err != nil && !errors.Is(err, storage.ErrNoSavedPages) && !errors.Is(err, os.ErrNotExist) {
 		return err
 	}
@@ -87,7 +89,7 @@ func (p *Processor) sendRandom(chatID int, username string) (err error) {
 		return err
 	}
 
-	return p.storage.Remove(page)
+	return p.storage.Remove(context.Background(), page)
 }
 
 func (p *Processor) sendHelp(chatID int) error {

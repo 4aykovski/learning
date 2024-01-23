@@ -1,26 +1,38 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"log"
 
 	tgClient "github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/clients/telegram"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/consumer/event-consumer"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/events/telegram"
-	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage/files"
+	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/internal/storage/sqlite"
 	"github.com/4aykovski/learning/tree/main/golang/telegram-bot/pkg/logger"
 )
 
 const (
-	tgBotHost   = "api.telegram.org"
-	storagePath = "files_storage"
-	batchSize   = 100
+	tgBotHost         = "api.telegram.org"
+	storagePath       = "files_storage"
+	sqliteStoragePath = "internal/data/sqlite/storage.db"
+	batchSize         = 100
 )
 
 func main() {
 
+	s, err := sqlite.New(sqliteStoragePath)
+	if err != nil {
+		log.Fatalf("can't connect to storage: %s", err.Error())
+	}
+
+	if err = s.Init(context.TODO()); err != nil {
+		log.Fatalf("can't init a storage: %s", err.Error())
+	}
+
 	eventsProcessor := telegram.New(
 		tgClient.New(tgBotHost, mustToken()),
-		files.New(storagePath),
+		s,
 	)
 
 	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)

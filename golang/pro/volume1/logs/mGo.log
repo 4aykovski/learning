@@ -1,0 +1,10 @@
+iLog 2024/01/25 09:56:12 Hello there!
+iLog 2024/01/25 09:56:12 Mastering Go 3rd edition!
+iLog 2024/01/25 09:56:19 Hello there!
+iLog 2024/01/25 09:56:19 Mastering Go 3rd edition!
+iLog 2024/01/25 09:58:20 Hello there!
+iLog 2024/01/25 09:58:20 Mastering Go 3rd edition!
+iLog 2024/01/25 09:58:55 main.go:21: Hello there!
+iLog 2024/01/25 09:58:55 main.go:22: Mastering Go 3rd edition!
+iLog 2024/01/25 09:59:07 /home/chaykovski/code/learning/golang/pro/volume1/logs/main.go:21: Hello there!
+iLog 2024/01/25 09:59:07 /home/chaykovski/code/learning/golang/pro/volume1/logs/main.go:22: Mastering Go 3rd edition!

@@ -1,4 +1,4 @@
-package db
+package database
 
 import "errors"
 
@@ -8,4 +8,7 @@ var (
 	ErrCantPrepareDatabase = errors.New("can't prepare database")
 	ErrURLNotFound         = errors.New("url not found")
 	ErrUrlExists           = errors.New("url exists")
+	ErrCantSavePage        = errors.New("can't save page")
+	ErrCantGetUrl          = errors.New("can't get url")
+	ErrCantDeleteUrl       = errors.New("can't delete url")
 )

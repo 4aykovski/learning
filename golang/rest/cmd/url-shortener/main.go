@@ -5,8 +5,11 @@ import (
 	"os"
 
 	"github.com/4aykovski/learning/golang/rest/internal/config"
-	"github.com/4aykovski/learning/golang/rest/internal/db/Postgres"
+	"github.com/4aykovski/learning/golang/rest/internal/database/Postgres"
+	mwLogger "github.com/4aykovski/learning/golang/rest/internal/http-server/middleware/logger"
 	"github.com/4aykovski/learning/golang/rest/internal/lib/logger/slogHelper"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 const (
@@ -16,10 +19,11 @@ const (
 )
 
 func main() {
+	// TODO: разобраться с prettyslog
 	// init config: cleanenv
 	cfg := config.MustLoad()
 
-	// init logger: slog ? grafana
+	// init logger: slog ? grafana ? kibana ? grep
 
 	log := setupLogger(cfg.Env)
 	log.Info("starting url-shortener", slog.String("env", cfg.Env))
@@ -33,7 +37,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	// TODO: init router: chi, "chi render"
+	repo := Postgres.NewUserRepository(pq)
+
+	// init router: chi, "chi render"
+
+	router := chi.NewRouter()
+
+	// middlewares
+	router.Use(middleware.RequestID)
+	router.Use(middleware.RealIP)
+	router.Use(mwLogger.New(log))
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
 
 	// TODO: run server
 }

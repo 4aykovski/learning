@@ -6,6 +6,7 @@ import (
 
 	"github.com/4aykovski/learning/golang/rest/internal/config"
 	"github.com/4aykovski/learning/golang/rest/internal/database/Postgres"
+	"github.com/4aykovski/learning/golang/rest/internal/http-server/handlers/url/save"
 	mwLogger "github.com/4aykovski/learning/golang/rest/internal/http-server/middleware/logger"
 	"github.com/4aykovski/learning/golang/rest/internal/lib/logger/slogHelper"
 	"github.com/go-chi/chi/v5"
@@ -37,7 +38,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	repo := Postgres.NewUserRepository(pq)
+	userRepo := Postgres.NewUserRepository(pq)
 
 	// init router: chi, "chi render"
 
@@ -49,6 +50,8 @@ func main() {
 	router.Use(mwLogger.New(log))
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
+
+	router.Post("/url", save.New(log, userRepo))
 
 	// TODO: run server
 }

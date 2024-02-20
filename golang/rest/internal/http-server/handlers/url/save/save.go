@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/4aykovski/learning/golang/rest/internal/database"
 	resp "github.com/4aykovski/learning/golang/rest/internal/lib/api/response"
 	"github.com/4aykovski/learning/golang/rest/internal/lib/logger/slogHelper"
 	"github.com/4aykovski/learning/golang/rest/internal/lib/random"
@@ -65,5 +66,30 @@ func New(log *slog.Logger, urlSaver URLRepository) http.HandlerFunc {
 		if alias == "" {
 			alias = random.NewRandomString(aliasLength)
 		}
+
+		if err = urlSaver.SaveURL(req.URL, alias); err != nil {
+			if errors.Is(err, database.ErrUrlExists) {
+				log.Info("url already exists", slog.String("url", req.URL))
+
+				render.JSON(w, r, resp.Error("url already exists"))
+				return
+			}
+
+			log.Error("failed to add url", slogHelper.Err(err))
+
+			render.JSON(w, r, resp.Error("failed to add url"))
+			return
+		}
+
+		log.Info("url added")
+
+		responseOK(w, r, alias)
 	}
+}
+
+func responseOK(w http.ResponseWriter, r *http.Request, alias string) {
+	render.JSON(w, r, Response{
+		Response: resp.OK(),
+		Alias:    alias,
+	})
 }

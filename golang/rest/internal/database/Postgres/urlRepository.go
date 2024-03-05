@@ -38,7 +38,7 @@ func (repo *UrlRepositoryPostgres) SaveURL(urlToSave string, alias string) error
 	return nil
 }
 
-func (repo *UrlRepositoryPostgres) GetUrl(alias string) (string, error) {
+func (repo *UrlRepositoryPostgres) GetURL(alias string) (string, error) {
 	stmt, err := repo.postgres.db.Prepare("SELECT url FROM url WHERE alias=$1")
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", database.ErrCantGetUrl, err)
@@ -57,7 +57,7 @@ func (repo *UrlRepositoryPostgres) GetUrl(alias string) (string, error) {
 	return resultUrl, nil
 }
 
-func (repo *UrlRepositoryPostgres) DeleteUrl(alias string) error {
+func (repo *UrlRepositoryPostgres) DeleteURL(alias string) error {
 	stmt, err := repo.postgres.db.Prepare("DELETE FROM url WHERE alias = $1 ")
 	if err != nil {
 		return fmt.Errorf("%w: %w", database.ErrCantDeleteUrl, err)
@@ -65,6 +65,10 @@ func (repo *UrlRepositoryPostgres) DeleteUrl(alias string) error {
 
 	_, err = stmt.Exec(alias)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return database.ErrURLNotFound
+		}
+
 		return fmt.Errorf("%w: %w", database.ErrCantDeleteUrl, err)
 	}
 

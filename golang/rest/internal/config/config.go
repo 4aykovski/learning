@@ -20,7 +20,7 @@ type Postgres struct {
 	Host         string `yaml:"host"`
 	Port         int    `yaml:"port"`
 	User         string `yaml:"user"`
-	Password     string `yaml:"user_password"`
+	Password     string `yaml:"user_password" env-required:"true" env:"POSTGRES_USER_PASSWORD"`
 	DatabaseName string `yaml:"database_name"`
 	DSNTemplate  string `yaml:"DSNTemplate"`
 }
@@ -29,6 +29,8 @@ type HTTPServer struct {
 	Address     string        `yaml:"address" env-default:"localhost:8080"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
 	IdleTimeout time.Duration `yaml:"idleTimeout" env-default:"60s"`
+	User        string        `yaml:"user" env-required:"true"`
+	Password    string        `yaml:"password" env-required:"true" env:"HTTP_SERVER_PASSWORD"`
 }
 
 func MustLoad() *Config {

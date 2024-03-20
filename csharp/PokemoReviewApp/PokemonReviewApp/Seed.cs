@@ -21,7 +21,7 @@ namespace PokemonReviewApp
                         Pokemon = new Pokemon()
                         {
                             Name = "Pikachu",
-                            BirthDate = new DateTime(1903,1,1),
+                            BirthDate = DateTime.SpecifyKind(new DateTime(1903, 1, 1), DateTimeKind.Utc),
                             PokemonCategories = new List<PokemonCategory>()
                             {
                                 new PokemonCategory { Category = new Category() { Name = "Electric"}}
@@ -52,7 +52,7 @@ namespace PokemonReviewApp
                         Pokemon = new Pokemon()
                         {
                             Name = "Squirtle",
-                            BirthDate = new DateTime(1903,1,1),
+                            BirthDate = DateTime.SpecifyKind(new DateTime(1903, 1, 1), DateTimeKind.Utc),
                             PokemonCategories = new List<PokemonCategory>()
                             {
                                 new PokemonCategory { Category = new Category() { Name = "Water"}}
@@ -83,7 +83,7 @@ namespace PokemonReviewApp
                         Pokemon = new Pokemon()
                         {
                             Name = "Venasuar",
-                            BirthDate = new DateTime(1903,1,1),
+                            BirthDate = DateTime.SpecifyKind(new DateTime(1903, 1, 1), DateTimeKind.Utc),
                             PokemonCategories = new List<PokemonCategory>()
                             {
                                 new PokemonCategory { Category = new Category() { Name = "Leaf"}}

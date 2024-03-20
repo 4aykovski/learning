@@ -1,13 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp;
+using PokemonReviewApp.Interface;
+using PokemonReviewApp.Repository;
 using PokemoReviewApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
-
+builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -36,3 +39,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
+app.Run();
